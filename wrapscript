@@ -1,0 +1,28 @@
+#!/bin/bash
+#installing necessary soft
+apt -y install gnome-tweak-tool
+apt -y install gnome-shell-extensions
+apt -y install chrome-gnome-shell
+#use *gnomeshell-extension-manage and configuring it for install wsw plugin
+./gnomeshell-extension-manage --install --extension-id 1116 --system
+
+#create file with user info for gnome-shell
+touch /etc/dconf/profile/user
+
+echo "
+user-db:user
+system-db:local
+" >> /etc/dconf/profile/user
+
+#create local file for sharing extension to all users
+mkdir -p /etc/dconf/db/local.d/
+touch /etc/dconf/db/local.d/00-extensions
+echo "
+[org/gnome/shell]
+# List all extensions that you want to have enabled for all users
+enabled-extensions=[‘workspace-switch-wraparound@theychx.org’]
+" >> /etc/dconf/db/local.d/00-extensions
+
+dconf update
+
+
